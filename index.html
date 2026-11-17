@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Thumb Scroll Prototype</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div class="stage">
+
+  <!-- ============ PHONE ============ -->
+  <div class="phone" id="phone">
+    <div class="status-bar" aria-hidden="true">
+      <span class="sb-time">9:41</span>
+      <span class="sb-icons">
+        <svg width="18" height="11" viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg>
+        <svg width="16" height="11" viewBox="0 0 16 11"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.1-1.1A10 10 0 0 0 8 .6 10 10 0 0 0 .9 3.5L2 4.6a8.5 8.5 0 0 1 6-2.4Zm0 3.2c1.4 0 2.7.5 3.7 1.4l1.1-1.1A7 7 0 0 0 8 3.8a7 7 0 0 0-4.8 1.9l1.1 1.1c1-.9 2.3-1.4 3.7-1.4Zm0 3.2c.6 0 1.1.2 1.5.6L8 10.7 6.5 9.2c.4-.4.9-.6 1.5-.6Z"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="19" height="8" rx="2"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" opacity=".4"/></svg>
+      </span>
+    </div>
+
+    <!-- Top Navigation Bar (Figma instance 2728:67796, 234px incl. 50px status zone) -->
+    <header class="top-nav">
+      <div class="title-row">
+        <h1>Collection</h1>
+        <button class="more-chip tappable" data-action="notes" aria-label="Prototype notes">
+          <svg width="14" height="4" viewBox="0 0 14 4"><circle cx="2" cy="2" r="1.6"/><circle cx="7" cy="2" r="1.6"/><circle cx="12" cy="2" r="1.6"/></svg>
+        </button>
+        <span class="spacer"></span>
+        <button class="icon-btn tappable" data-action="na" aria-label="Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2"/><circle cx="9.5" cy="20" r="1.2"/><circle cx="17.5" cy="20" r="1.2"/></svg>
+        </button>
+        <button class="icon-btn tappable" data-action="na" aria-label="Messages">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="13" rx="2"/><path d="M8 17v3.5l4-3.5"/><path d="M8 9.5h8M8 12.5h5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="search-row">
+        <button class="search-field tappable" data-action="na">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+          <span>Search Collection</span>
+        </button>
+        <button class="scan-btn tappable" data-action="na" aria-label="Scan barcode">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M8 8v8M11 8v8M14 8v8M16.5 8v8"/></svg>
+        </button>
+      </div>
+      <div class="filter-row">
+        <button class="chip tappable" data-action="na">Filters
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+        </button>
+        <span class="spacer"></span>
+        <button class="chip tappable" data-action="sort" id="sortChip"><span id="sortLabel">Artist (desc)</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+        </button>
+        <button class="chip chip-icon tappable" data-action="na" aria-label="Folders">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.6l2 2h8.4A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrolling content (Figma "Content") -->
+    <main class="list" id="list"></main>
+
+    <!-- ===== Thumb scroll + jump indicator (Figma 2459:32558 "Jump List active") ===== -->
+    <div class="thumb-track" id="track" aria-hidden="true">
+      <div class="thumb-wrap" id="thumbWrap">
+        <div class="jump-label" id="jumpLabel">A</div>
+        <div class="thumb" id="thumb" role="scrollbar" aria-label="Fast scroll" aria-orientation="vertical" tabindex="-1">
+          <svg width="11" height="20" viewBox="0 0 11 20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6.5 5.5 2.5l4 4M1.5 13.5l4 4 4-4"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Bar (Figma instance 2728:67797) — reused from Master A -->
+    <nav class="tab-bar">
+      <button class="tab-bar-item tappable" data-action="na"><span class="icon-div"><span class="icon-box"><img class="glyph-explore" src="assets/tab-explore.svg" alt="" /></span></span><span class="label">Explore</span></button>
+      <button class="tab-bar-item active tappable" data-action="na"><span class="icon-div"><span class="icon-box"><img class="glyph-collection" src="assets/tab-collection.svg" alt="" /></span></span><span class="label">Collection</span></button>
+      <button class="tab-bar-item tappable" data-action="na"><span class="icon-div"><span class="icon-box"><img class="glyph-wantlist" src="assets/tab-wantlist.svg" alt="" /></span></span><span class="label">Wantlist</span></button>
+      <button class="tab-bar-item tappable" data-action="na"><span class="icon-div"><span class="icon-box"><img class="glyph-profile" src="assets/tab-profile.svg" alt="" /></span></span><span class="label">Profile</span></button>
+    </nav>
+
+    <div class="toast" id="toast">Not in this prototype</div>
+
+    <!-- notes sheet (mobile: opened from the ··· chip) -->
+    <div class="sheet-scrim" id="scrim" data-action="close-notes"></div>
+    <div class="sheet" id="sheet"></div>
+  </div>
+
+  <!-- ============ DEV NOTES (desktop: beside the phone) ============ -->
+  <aside class="notes" id="notes"></aside>
+</div>
+
+<template id="notesTpl">
+  <h2>Thumb scroll — behaviour spec</h2>
+  <p class="src">Figma: <em>Collection Side Nav Jump List &amp; Thumb Scroll</em> (node 2728:65746). Built for devs to feel the behaviour, not as pixel spec.</p>
+
+  <div class="controls">
+    <label>Sort
+      <select id="ctlSort">
+        <option value="artist">Artist (A–Z) — letter label</option>
+        <option value="added">Date Added — year label</option>
+        <option value="title">Title (A–Z) — letter label</option>
+      </select>
+    </label>
+    <label>Collection size
+      <select id="ctlSize">
+        <option value="full">Full (~150 items)</option>
+        <option value="short">Short (8 items) — no thumb</option>
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" id="ctlDebug" /> Show thumb hit area &amp; track</label>
+  </div>
+
+  <h3>From the Figma file</h3>
+  <ol>
+    <li><b>Appears</b> once the first item in the collection reaches the top of the list and the Collection Value card has scrolled away.</li>
+    <li><b>Position</b> follows scroll on the right edge, from the start to the end of the collection (proportional).</li>
+    <li><b>Pressing</b> the thumb shows the jump label to its left: a <b>letter</b> for A–Z sorts, a <b>year</b> for Date Added.</li>
+    <li><b>Disappears</b> 1&nbsp;second after the user stops touching the screen or the thumb.</li>
+  </ol>
+
+  <h3>Assumed — not in Figma (confirm with design)</h3>
+  <ol start="5">
+    <li><b>Drag to scrub:</b> dragging the thumb scrolls the list; the label updates live to the section at the top of the list.</li>
+    <li><b>Track taps do nothing.</b> Only the thumb is interactive; the rest of the right edge passes taps to the cards.</li>
+    <li><b>Other sorts:</b> text sorts (Title, Label) show the first character; date sorts show the year. Non-letters group under <b>#</b>. Price/format sorts undefined.</li>
+    <li><b>Short lists:</b> no thumb when content is under 3 screens tall.</li>
+    <li><b>Haptics:</b> a light tick each time the label changes while dragging (prototype calls <code>navigator.vibrate</code> — Android Chrome only; native should use selection feedback).</li>
+    <li><b>Motion:</b> 200&nbsp;ms fade in/out; label scales in from the thumb. While pressed, the 1&nbsp;s hide timer is paused.</li>
+    <li><b>Thumb sits ~12&nbsp;px past the screen edge</b>, matching the clipped circle in the mocks.</li>
+  </ol>
+
+  <h3>Not modelled</h3>
+  <ul>
+    <li>Accessibility: native should expose the thumb as an adjustable control (VoiceOver swipe up/down = next/previous section).</li>
+    <li>Data, artwork and the Collection Value numbers are placeholders.</li>
+  </ul>
+</template>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

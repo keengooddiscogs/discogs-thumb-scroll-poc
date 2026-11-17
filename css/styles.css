@@ -1,0 +1,280 @@
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(../assets/fonts/inter-var-latin.woff2) format("woff2");
+}
+
+/* Tokens copied from Master A (same Discogs app library). */
+:root {
+  --background-default: #ffffff;
+  --background-default01: #f5f5f5;
+  --background-secondary: #eeeeee;
+  --background-primary: #121212;
+  --background-chip: rgba(0, 0, 0, 0.05);
+  --background-app-nav-bar: #121212;
+  --background-section: #f1f0e8; /* section header fill, sampled from mock */
+  --content-primary: #000000;
+  --content-secondary: #757575;
+  --content-contrast: #ffffff;
+  --border-light: #e5e5e5;
+  --text-primary-inverse: rgba(255, 255, 255, 0.9);
+  --text-secondary-inverse: rgba(170, 170, 170, 0.95);
+  --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* thumb scroll geometry (Figma 2459:32558 / 2728:67798) */
+  --thumb-size: 48px;
+  --thumb-overhang: 12px; /* how far the circle runs past the screen edge (logged) */
+  --track-inset: 20px;    /* gap from header bottom / tab bar top */
+  --fade: 200ms;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font-family);
+  color: var(--content-primary);
+  background: #e9e9e6;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+/* ---------- stage: phone frame + notes on desktop, full-bleed on phones ---------- */
+.stage {
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 40px 24px;
+}
+.phone {
+  position: relative;
+  width: 375px;
+  height: 812px;
+  flex: none;
+  overflow: hidden;
+  background: var(--background-default);
+  border-radius: 44px;
+  box-shadow: 0 0 0 10px #111, 0 30px 60px rgba(0,0,0,.25);
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+  user-select: none;
+  -webkit-user-select: none;
+}
+@media (max-width: 760px) {
+  .stage { padding: 0; display: block; }
+  .phone { width: 100%; height: 100dvh; border-radius: 0; box-shadow: none; }
+  .notes { display: none; }
+}
+
+/* ---------- status bar (desktop frame only; phones use the real one) ---------- */
+.status-bar {
+  height: 50px; flex: none;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 28px 0 36px;
+  font-weight: 600; font-size: 16px;
+}
+.sb-icons { display: flex; gap: 6px; align-items: center; }
+.sb-icons svg { fill: currentColor; }
+@media (max-width: 760px) {
+  .status-bar { height: env(safe-area-inset-top, 0px); padding: 0; }
+  .status-bar > * { display: none; }
+}
+
+/* ---------- top navigation ---------- */
+.top-nav { flex: none; padding: 0 16px 12px; background: var(--background-default); }
+.title-row { display: flex; align-items: center; gap: 8px; height: 48px; }
+.title-row h1 { font-size: 24px; line-height: 32px; font-weight: 700; letter-spacing: -0.2px; }
+.more-chip {
+  width: 24px; height: 24px; border-radius: 99px; background: var(--background-secondary);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.more-chip svg { fill: currentColor; }
+.spacer { flex: 1; }
+.icon-btn { width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; }
+
+.search-row { display: flex; gap: 8px; margin-top: 8px; }
+.search-field {
+  flex: 1; height: 40px; border-radius: 99px; border: 1px solid var(--border-light);
+  display: flex; align-items: center; gap: 8px; padding: 0 14px;
+  color: var(--content-secondary); font-size: 14px; text-align: left;
+}
+.scan-btn {
+  width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--content-primary);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.filter-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.chip {
+  height: 28px; padding: 0 10px; border-radius: 99px; background: var(--background-chip);
+  display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500;
+}
+.chip-icon { width: 28px; padding: 0; justify-content: center; }
+
+/* ---------- list ---------- */
+.list {
+  position: relative; /* section offsetTop is measured against the list */
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px 16px 24px;
+  scrollbar-width: none;
+}
+.list::-webkit-scrollbar { display: none; }
+
+.value-card {
+  border: 1px solid var(--border-light); border-radius: 8px; padding: 12px;
+  height: 104px;
+}
+.value-card .vc-head { font-size: 12px; font-weight: 700; display: flex; justify-content: space-between; }
+.value-card .vc-head span { font-weight: 400; color: var(--content-secondary); font-size: 10px; }
+.value-card .vc-cols { display: flex; justify-content: space-between; margin-top: 14px; font-size: 11px; color: var(--content-secondary); }
+.value-card .vc-cols b { display: block; color: var(--content-primary); font-size: 13px; margin-top: 4px; }
+.value-card .vc-cols div:nth-child(2) { text-align: center; }
+.value-card .vc-cols div:nth-child(3) { text-align: right; }
+
+.list-count {
+  display: flex; align-items: center; gap: 16px; height: 26px; margin: 16px 0;
+  font-size: 12px; font-weight: 600; color: var(--content-secondary); white-space: nowrap;
+}
+.list-count::before, .list-count::after { content: ""; flex: 1; border-top: 1px solid var(--border-light); }
+
+/* sections: 28px header, 8px between items, 16px between sections (Figma A/B/C Cards) */
+.section { display: flex; flex-direction: column; gap: 8px; }
+.section + .section { margin-top: 16px; }
+.section-head {
+  height: 28px; border-radius: 4px; background: var(--background-section);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+}
+
+/* Release List Card — 343×96, 80px thumbnail inset 8, metadata at x96, 24px menu column */
+.card {
+  height: 96px; display: flex; border-radius: 4px;
+  background: var(--background-default);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.06);
+}
+.card .thumb-img {
+  width: 80px; height: 80px; margin: 8px; flex: none; border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 22px; color: rgba(255,255,255,.85);
+}
+.card .meta { flex: 1; min-width: 0; padding: 13px 0 0; }
+.card .t { font-size: 14px; line-height: 18px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card .a { font-size: 12px; line-height: 14px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card .d { font-size: 11px; line-height: 14px; color: var(--content-secondary); margin-top: 11px; }
+.card .d + .d { margin-top: 2px; }
+.card .menu { width: 24px; flex: none; display: flex; align-items: center; justify-content: center; }
+.card .menu svg { fill: currentColor; }
+
+/* ---------- thumb scroll ---------- */
+/* The track spans the list area. It ignores pointer events itself (track taps do
+   nothing — assumption 6); only the thumb receives touches. */
+.thumb-track {
+  position: absolute;
+  right: 0;
+  width: 140px;
+  pointer-events: none;
+  z-index: 5;
+}
+.thumb-wrap {
+  position: absolute;
+  right: calc(-1 * var(--thumb-overhang));
+  top: 0;
+  height: var(--thumb-size);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity var(--fade) ease;
+  will-change: transform, opacity;
+}
+.thumb-wrap.visible { opacity: 1; }
+.thumb {
+  width: var(--thumb-size); height: var(--thumb-size); border-radius: 50%;
+  background: var(--background-primary);
+  display: flex; align-items: center; justify-content: center;
+  padding-right: calc(var(--thumb-overhang) * 0.6);
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  touch-action: none;
+  cursor: grab;
+  pointer-events: none; /* enabled only while visible */
+  position: relative;
+}
+.thumb-wrap.visible .thumb { pointer-events: auto; }
+/* bigger invisible hit area for fingers */
+.thumb::before { content: ""; position: absolute; inset: -8px -4px -8px -16px; }
+.thumb-wrap.pressed .thumb { cursor: grabbing; }
+
+.jump-label {
+  min-width: 32px; height: 32px; padding: 0 9px; border-radius: 8px;
+  background: var(--background-primary); color: var(--content-contrast);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums;
+  opacity: 0; transform: translateX(12px) scale(.85);
+  transform-origin: right center;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+.thumb-wrap.pressed .jump-label { opacity: 1; transform: none; }
+
+/* debug overlay */
+.debug .thumb-track { background: rgba(255, 0, 80, .06); outline: 1px dashed rgba(255,0,80,.5); }
+.debug .thumb::before { background: rgba(0, 120, 255, .18); }
+
+/* ---------- tab bar (from Master A) ---------- */
+.tab-bar {
+  flex: none; z-index: 8;
+  background: var(--background-app-nav-bar);
+  padding: 8px 8px 30px;
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+@media (max-width: 760px) {
+  .tab-bar { padding-bottom: max(env(safe-area-inset-bottom, 0px), 6px); }
+}
+.tab-bar-item { flex: 1 0 0; min-width: 1px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.tab-bar-item .icon-div { width: 46px; padding: 4px 8px; display: flex; align-items: center; justify-content: center; border-radius: 36px; }
+.tab-bar-item.active .icon-div { background: #ffffff; }
+.tab-bar-item .icon-div .icon-box { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+.tab-bar-item .icon-div img.glyph-explore { width: 17px; height: 17px; }
+.tab-bar-item .icon-div img.glyph-collection { width: 16px; height: 15px; }
+.tab-bar-item .icon-div img.glyph-wantlist { width: 20px; height: 13px; }
+.tab-bar-item .icon-div img.glyph-profile { width: 19.5px; height: 19.5px; }
+.tab-bar-item .label { font-size: 12px; line-height: 16px; letter-spacing: .2px; color: var(--text-secondary-inverse); }
+.tab-bar-item.active .label { font-weight: 700; color: var(--text-primary-inverse); }
+
+/* ---------- toast ---------- */
+.toast {
+  position: absolute; left: 50%; bottom: 110px; transform: translate(-50%, 8px);
+  background: #121212; color: #fff; font-size: 13px; padding: 10px 14px; border-radius: 8px;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 20; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- notes (desktop panel + mobile sheet) ---------- */
+.notes {
+  width: 400px; max-width: 100%; font-size: 14px; line-height: 1.5; color: #222;
+  background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 6px 24px rgba(0,0,0,.08);
+}
+.notes h2, .sheet h2 { font-size: 18px; margin-bottom: 4px; }
+.notes h3, .sheet h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: #666; margin: 20px 0 6px; }
+.notes ol, .notes ul, .sheet ol, .sheet ul { padding-left: 20px; }
+.notes li, .sheet li { margin-bottom: 6px; }
+.src { color: #666; font-size: 12px; }
+.controls { display: grid; gap: 10px; margin-top: 16px; padding: 14px; background: #f5f5f3; border-radius: 10px; }
+.controls label { display: grid; gap: 4px; font-size: 12px; font-weight: 600; color: #444; }
+.controls label.check { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.controls select { font: inherit; font-size: 14px; padding: 6px 8px; border-radius: 6px; border: 1px solid #ccc; background: #fff; }
+code { font-size: 12px; background: #f0f0f0; padding: 1px 4px; border-radius: 3px; }
+
+.sheet-scrim { position: absolute; inset: 0; background: rgba(0,0,0,.4); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 30; }
+.sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; max-height: 85%; overflow-y: auto;
+  background: #fff; border-radius: 16px 16px 0 0; padding: 20px 20px 40px; font-size: 14px; line-height: 1.5;
+  transform: translateY(100%); transition: transform .3s ease; z-index: 31;
+}
+.sheet-open .sheet-scrim { opacity: 1; pointer-events: auto; }
+.sheet-open .sheet { transform: none; }
